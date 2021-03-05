@@ -1,0 +1,46 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// THIS IS THE SCRIPT THAT ACTUALLY MOVES THE OBJECT (RIGIDBODY2D IS REQUIRED) (FEEL FREE TO ADJUST VALUES TO YOUR LIKINGS) //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Utility : MonoBehaviour
+{
+    public float PushForceMultiplier;
+    public Vector2 MaxForce;
+    public Vector2 MinForce;
+    public Rigidbody2D rb;
+
+    private Vector3 StartVector;
+    private Vector3 EndVector;
+    private Vector2 Force;
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            StartVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            StartVector.z = 0;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            EndVector = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            EndVector.z = 0;
+
+            Force = new Vector2(Mathf.Clamp(StartVector.x - EndVector.x, MinForce.x, MaxForce.x), Mathf.Clamp(StartVector.y - EndVector.y, MinForce.y, MaxForce.y));
+
+            rb.velocity = new Vector2(0, 0);
+            
+            if(Force.x * PushForceMultiplier + Force.y * PushForceMultiplier <= 5)
+            {
+                rb.AddForce(Force * PushForceMultiplier, ForceMode2D.Impulse);
+            }
+            else
+            {
+                rb.AddForce(Force * PushForceMultiplier, ForceMode2D.Impulse);
+            }
+        }
+    }
+}
